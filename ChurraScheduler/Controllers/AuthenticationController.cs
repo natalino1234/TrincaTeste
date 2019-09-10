@@ -11,11 +11,14 @@ namespace ChurraScheduler.Controllers
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
+        List<string> teste = new List<string>();
+
         // POST api/Churras/List
         [HttpPost]
         [Route("Authenticate")]
         public ActionResult<IEnumerable<string>> Authenticate([FromBody] Usuario userAuth)
         {
+            /*Fazer alguma coisa de autenticação OAuth2*/
             return new string[] { "value1", "value2" };
         }
     }

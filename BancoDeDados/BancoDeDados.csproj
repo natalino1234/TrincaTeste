@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Data.SQLite" Version="1.0.111" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Modelos">
+      <HintPath>..\Modelos\bin\Debug\netstandard2.0\Modelos.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>
