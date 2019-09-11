@@ -6,13 +6,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="NovaPasta\**" />
+    <Content Remove="NovaPasta\**" />
+    <EmbeddedResource Remove="NovaPasta\**" />
+    <None Remove="NovaPasta\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.111" />
   </ItemGroup>
 
-
   <ItemGroup>
+    <Reference Include="BancoDeDados">
+      <HintPath>..\BancoDeDados\bin\Debug\netstandard2.0\BancoDeDados.dll</HintPath>
+    </Reference>
     <Reference Include="Modelos">
       <HintPath>..\Modelos\bin\Debug\netstandard2.0\Modelos.dll</HintPath>
     </Reference>

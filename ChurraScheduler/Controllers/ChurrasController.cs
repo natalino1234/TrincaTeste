@@ -14,8 +14,9 @@ namespace ChurraScheduler.Controllers
         // POST api/Churras/Create
         [HttpPost]
         [Route("Create")]
-        public ActionResult<IEnumerable<string>> CreateChurras([FromBody] Usuario userAuth, [FromBody] Churras churras)
+        public ActionResult<IEnumerable<string>> CreateChurras([FromBody] Churras churras)
         {
+
             return new string[] { "value1", "value2" };
         }
 
@@ -30,7 +31,7 @@ namespace ChurraScheduler.Controllers
         // POST api/Churras/List
         [HttpPost]
         [Route("List")]
-        public ActionResult<IEnumerable<string>> ListChurras([FromBody] Usuario userAuth, [FromBody] Churras churras)
+        public ActionResult<IEnumerable<string>> ListChurras([FromBody] Usuario churras)
         {
             return new string[] { "value1", "value2" };
         }
@@ -38,7 +39,7 @@ namespace ChurraScheduler.Controllers
         // POST api/Churras/Edit
         [HttpPost]
         [Route("List")]
-        public ActionResult<IEnumerable<string>> EditChurras([FromBody] Usuario userAuth, [FromBody] Churras churras)
+        public ActionResult<IEnumerable<string>> EditChurras([FromBody] Usuario userAuth)
         {
             return new string[] { "value1", "value2" };
         }

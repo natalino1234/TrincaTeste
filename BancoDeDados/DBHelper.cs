@@ -8,25 +8,34 @@ namespace BancoDeDados
     public abstract class DBHelper<T>
     {
         protected static SQLiteConnection sqliteConnection;
+        protected static string Conn { get; set; }
 
         public DBHelper(string conn)
         {
+            Conn = conn;
             InitConnection(conn);
+            CreateTable();
         }
 
         private void InitConnection(string conn)
         {
             if(sqliteConnection == null)
             {
-                sqliteConnection = new SQLiteConnection(conn);
+                //CreateDatabase(conn);
+                sqliteConnection = new SQLiteConnection("Data Source="+conn+"; Version=3");
                 sqliteConnection.Open();
             }
             else { 
-                if(sqliteConnection.State != System.Data.ConnectionState.Open)
+                if(sqliteConnection.State != ConnectionState.Open)
                 {
                     sqliteConnection.Open();
                 }
             }
+        }
+
+        public void Close()
+        {
+            sqliteConnection.Close();
         }
 
         public void CreateDatabase(string path)
@@ -41,7 +50,7 @@ namespace BancoDeDados
             }
         }
 
-        public abstract void CreateTable();
+        protected abstract void CreateTable();
         public abstract void Insert(T t);
         public abstract void Update(T t);
         public abstract void Delete(T t);

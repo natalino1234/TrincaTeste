@@ -25,5 +25,18 @@ namespace Modelos
             Nome = nome;
             AuthToken = authToken;
         }
+
+        public string toJSON()
+        {
+            string s = "{";
+            s += "Id:" + Id + ",";
+            s += "Login:\"" + Login + "\",";
+            s += "Senha:\"" + Senha + "\",";
+            s += "Nome:\"" + Nome + "\",";
+            s += "AuthToken:\"" + AuthToken + "\"";
+            s += "}";
+
+            return s;
+        }
     }
 }

@@ -6,14 +6,14 @@ using Modelos;
 
 namespace BancoDeDados.Impl
 {
-    class ChurrasParticipanteDAO : DBHelper<ChurrasParticipante>
+    public class ChurrasParticipanteDAO : DBHelper<ChurrasParticipante>
     {
 
         public ChurrasParticipanteDAO(string conn) : base (conn)
         {
         }
 
-        public override void CreateTable()
+        protected override void CreateTable()
         {
             try
             {
@@ -21,7 +21,7 @@ namespace BancoDeDados.Impl
                 {
                     cmd.CommandText = @"
                             CREATE TABLE IF NOT EXISTS ChurrasParticipante(
-                                id int AUTO_INCREMENT PRIMARY KEY, 
+                                id INTEGER PRIMARY KEY AUTOINCREMENT, 
                                 id_churras VARCHAR(255), 
                                 nome_participante VARCHAR(255), 
                                 pago int(1)

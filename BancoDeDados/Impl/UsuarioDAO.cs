@@ -7,14 +7,14 @@ using Modelos;
 
 namespace BancoDeDados.Impl
 {
-    class UsuarioDAO : DBHelper<Usuario>
+    public class UsuarioDAO : DBHelper<Usuario>
     {
 
         public UsuarioDAO(string conn) : base (conn)
         {
         }
 
-        public override void CreateTable()
+        protected override void CreateTable()
         {
             try
             {
@@ -22,7 +22,7 @@ namespace BancoDeDados.Impl
                 {
                     cmd.CommandText = @"
                             CREATE TABLE IF NOT EXISTS Usuario(
-                                id int AUTO_INCREMENT PRIMARY KEY, 
+                                id INTEGER PRIMARY KEY AUTOINCREMENT, 
                                 login VARCHAR(255), 
                                 senha VARCHAR(255),
                                 nome VARCHAR(255),
@@ -90,8 +90,6 @@ namespace BancoDeDados.Impl
             SQLiteDataAdapter da;
             DataTable dt = new DataTable();
             List<Usuario> UsuarioList = new List<Usuario>();
-            try
-            {
                 using (var cmd = sqliteConnection.CreateCommand())
                 {
                     cmd.CommandText = "SELECT * FROM Usuario";
@@ -112,11 +110,6 @@ namespace BancoDeDados.Impl
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
             return UsuarioList;
         }
 

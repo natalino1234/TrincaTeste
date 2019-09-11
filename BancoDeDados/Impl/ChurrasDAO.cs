@@ -6,14 +6,14 @@ using Modelos;
 
 namespace BancoDeDados.Impl
 {
-    class ChurrasDAO : DBHelper<Churras>
+    public class ChurrasDAO : DBHelper<Churras>
     {
 
         public ChurrasDAO(string conn) : base (conn)
         {
         }
 
-        public override void CreateTable()
+        protected override void CreateTable()
         {
             try
             {
@@ -21,12 +21,13 @@ namespace BancoDeDados.Impl
                 {
                     cmd.CommandText = @"
                             CREATE TABLE IF NOT EXISTS Churras(
-                                id int AUTO_INCREMENT PRIMARY KEY, 
+                                id INTEGER PRIMARY KEY AUTOINCREMENT, 
+                                id_usuario INTEGER, 
                                 Nome VARCHAR(255), 
                                 Observacoes VARCHAR(255), 
                                 dataChurras DATETIME,
-                                valor_individual decimal(10,2),
-                                bebida_incluida INT(1)
+                                valor_individual DECIMAL(10,2),
+                                bebida_incluida INTEGER
                             );";
                     cmd.ExecuteNonQuery();
                 }
@@ -69,6 +70,7 @@ namespace BancoDeDados.Impl
                     {
                         Churras churras = new Churras(
                             Convert.ToInt32(dt.Rows[0]["id"].ToString()),
+                            Convert.ToInt32(dt.Rows[0]["id_usuario"].ToString()),
                             dt.Rows[0]["observacoes"].ToString(),
                             dt.Rows[0]["nome"].ToString(),
                             Convert.ToDateTime(dt.Rows[0]["dataChurras"].ToString()),
@@ -104,7 +106,8 @@ namespace BancoDeDados.Impl
                         {
                             Churras churras = new Churras(
                                 Convert.ToInt32(dr["id"].ToString()),
-                                dt.Rows[0]["observacoes"].ToString(),
+                                Convert.ToInt32(dr["id_usuario"].ToString()),
+                                dr["observacoes"].ToString(),
                                 dr["nome"].ToString(),
                                 Convert.ToDateTime(dr["dataChurras"].ToString()),
                                 Convert.ToDouble(dr["valor_individual"].ToString()),
@@ -140,12 +143,16 @@ namespace BancoDeDados.Impl
                         {
                             Churras churras = new Churras(
                                 Convert.ToInt32(dr["id"].ToString()),
-                                dt.Rows[0]["observacoes"].ToString(),
+                                Convert.ToInt32(dr["id_usuario"].ToString()),
+                                dr["observacoes"].ToString(),
                                 dr["nome"].ToString(),
                                 Convert.ToDateTime(dr["dataChurras"].ToString()),
                                 Convert.ToDouble(dr["valor_individual"].ToString()),
                                 Convert.ToBoolean(dr["bebida_incluida"].ToString())
                             );
+                            ChurrasParticipanteDAO partDao = new ChurrasParticipanteDAO(Conn);
+
+                            churras.participantes = partDao.FindAll_Custom("Select * from ChurrasParticipante where id_churras = "+churras.Id);
                             churrasList.Add(churras);
                         }
                     }
@@ -167,6 +174,7 @@ namespace BancoDeDados.Impl
                     cmd.CommandText =
                             "INSERT INTO Churras " +
                             "(" +
+                                "id_usuario, " +
                                 "Nome, " +
                                 "Observacoes, " +
                                 "dataChurras, " +
@@ -175,6 +183,7 @@ namespace BancoDeDados.Impl
                             ") " +
                             "VALUES " +
                             "(" +
+                                "" + t.Id_usuario + ", " +
                                 "\"" + t.Nome + "\", " +
                                 "\"" + t.Observacoes + "\", " +
                                 "\"" + t.Data.ToString("yyyy-MM-dd") + "\", " +
