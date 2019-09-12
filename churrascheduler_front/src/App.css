@@ -34,26 +34,38 @@
 .App .background h1 {
     margin: 0px;
     padding: 0px;
-    position: relative;
+    position: absolute;
+    left: 50%;
     top: 70px;
+    transform: translateX(-50%);
     font-family: 'Raleway';
     font-style: normal;
     font-weight: bold;
-    font-size: 5vh;
+    font-size: 40px;
     line-height: 38px;
 }
 
-.App .background .trinca-logo {
-    position: absolute;
-    width: 48px;
-    height: 48px;
-    transform: translateX(-24px);
-    bottom: 28px;
-}
+    .App .background .background-branco {
+        background: white;
+        top: 203px;
+        height: calc(100% - 203px);
+    }
+
+    .App .background .trinca-logo {
+        position: absolute;
+        width: 48px;
+        height: 48px;
+        transform: translateX(-24px);
+        bottom: 28px;
+    }
 
 .App .content{
     top: 156px;
-    height: calc(100% - 156px);
+    height: calc(100% - 260px);
     overflow-y: auto;
-    
+    padding-bottom: 50px;
+}
+
+.App .content > div{
+    min-height: 100%;
 }
