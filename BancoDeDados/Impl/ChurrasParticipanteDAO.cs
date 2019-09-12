@@ -42,7 +42,7 @@ namespace BancoDeDados.Impl
                 using (var cmd = sqliteConnection.CreateCommand())
                 {
                     cmd.CommandText = @"
-                            DELETE FROM ChurrasParticipante WHERE ID = "+t.Id;
+                            DELETE FROM ChurrasParticipante WHERE ID = "+t.Id+" and id_churras = "+t.Id_churras;
                     cmd.ExecuteNonQuery();
                 }
             }

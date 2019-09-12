@@ -174,7 +174,7 @@ namespace ChurraScheduler.Controllers
 
         // POST api/Churras/AddParticipante
         [HttpPost]
-        [Route("AddParticipante")]
+        [Route("AdicionarParticipante")]
         public ActionResult<IEnumerable<string>> AddParticipanteChurras(string authToken, int id_churras, string nome)
         {
 
@@ -195,6 +195,46 @@ namespace ChurraScheduler.Controllers
                         dao.Insert(participante);
 
                         j = new JsonResult(new object[] { true,  dao.FindAll_Custom("Select * from churrasparticipante where id_churras = "+id_churras)});
+
+                        dao.Close();
+                    }
+                    finally { dao.Close(); }
+                }
+                else
+                {
+                    j = new JsonResult(new object[] { false, "Você não tem permissão para acessar essas informações." });
+                }
+            }
+            catch (Exception e)
+            {
+                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador.", local, e.StackTrace });
+            }
+            return j;
+        }
+
+        // POST api/Churras/AddParticipante
+        [HttpPost]
+        [Route("RemoverParticipante")]
+        public ActionResult<IEnumerable<string>> RemParticipanteChurras(string authToken, int id_participante, int id_churras)
+        {
+
+            Usuario usuario = new Usuario("", "", "", authToken);
+            JsonResult j;
+
+            var appSettings = ConfigurationManager.AppSettings;
+            string local = appSettings["DatabasePath"] ?? "Not Found";
+            try
+            {
+                UsuarioDAO daouser = new UsuarioDAO(local);
+                if (daouser.FindAll_Custom("Select * from usuario where authtoken = \"" + usuario.AuthToken + "\" and login = \"" + usuario.Login + "\"").Count > 0)
+                {
+                    ChurrasParticipanteDAO dao = new ChurrasParticipanteDAO(local);
+                    try
+                    {
+                        ChurrasParticipante participante = new ChurrasParticipante(id_participante ,id_churras, "", false);
+                        dao.Delete(participante);
+
+                        j = new JsonResult(new object[] { true, dao.FindAll_Custom("Select * from churrasparticipante where id_churras = " + id_churras) });
 
                         dao.Close();
                     }
