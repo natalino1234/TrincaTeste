@@ -17,8 +17,10 @@ namespace ChurraScheduler.Controllers
         // POST api/Usuario/List
         [HttpPost]
         [Route("Authenticate")]
-        public JsonResult Authenticate([FromBody] Usuario usuario)
+        public JsonResult Authenticate(string login, string senha)
         {
+
+            Usuario usuario = new Usuario(login,senha,"","");
 
             JsonResult j;
             try
@@ -30,12 +32,12 @@ namespace ChurraScheduler.Controllers
                 {
                     List<Usuario> logado = dao.FindAll_Custom("" +
                         "Select " +
-                        "   * " +
+                        " * " +
                         "from " +
-                        "   usuario " +
+                        "usuario " +
                         "where " +
-                        "   login = \"" + usuario.Login + "\" " +
-                        "   AND senha = \"" + usuario.Senha + "\";");
+                        "login = '" + usuario.Login + "' " +
+                        "AND senha = '" + usuario.Senha + "';");
                     if (logado.Count > 0)
                     {
                         Usuario u = logado[0];
@@ -47,7 +49,15 @@ namespace ChurraScheduler.Controllers
                     else
                     {
                         dao.Close();
-                        j = new JsonResult(new object[] { "false", "Usuário não encontrado." });
+                        j = new JsonResult(new object[] { "false", "Usuário não encontrado.",
+                        "" +
+                        "Select " +
+                        " * " +
+                        "from " +
+                        "usuario " +
+                        "where " +
+                        "login = '" + usuario.Login + "' " +
+                        "AND senha = '" + usuario.Senha + "';"});
                     }
                 }
                 finally
@@ -65,8 +75,9 @@ namespace ChurraScheduler.Controllers
         // POST api/Usuario/Create
         [HttpPost]
         [Route("Create")]
-        public JsonResult Create([FromBody] Usuario usuario)
+        public JsonResult Create(string login, string senha, string nome)
         {
+            Usuario usuario = new Usuario(login, senha, nome, "");
             JsonResult j;
             try
             {
@@ -85,7 +96,7 @@ namespace ChurraScheduler.Controllers
                     {
                         Usuario u = logado[0];
                         u.AuthToken = Utils.Utils.alfanumericoAleatorio(25);
-                        dao.Update(u);
+                        dao.Insert(u);
                         j = new JsonResult(new object[] { true, u.Login, u.AuthToken, u.Nome });
                     }
                     else
@@ -169,13 +180,6 @@ namespace ChurraScheduler.Controllers
                 try
                 {
                     List<Usuario> usuarios = dao.FindAll();
-                    /*
-                     * List<string> s = new List<string>();
-                    foreach (Usuario u in usuarios)
-                    {
-                        s.Add(u.toJSON());
-                    }
-                    */
                     dao.Close();
                     j = new JsonResult(new object[] {true, usuarios });
                 }

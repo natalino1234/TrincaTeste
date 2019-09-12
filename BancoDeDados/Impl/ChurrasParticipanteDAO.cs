@@ -200,5 +200,25 @@ namespace BancoDeDados.Impl
                 throw ex;
             }
         }
+
+        public void pagar(int id_participante)
+        {
+            try
+            {
+                using (var cmd = sqliteConnection.CreateCommand())
+                {
+                    cmd.CommandText =
+                            "UPDATE ChurrasParticipante " +
+                            "Set " +
+                            "pago = \"" + 1 + "\" " +
+                            "WHERE ID = " + id_participante;
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }
