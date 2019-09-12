@@ -1,26 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
+import bbqpattern from './assets/images/bbq-pattern.svg';
+import trincaLogo from './assets/images/trinca-logo.svg';
 import './App.css';
+import Login from './pages/Login/Login';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <div className="background">
+                <div className="shadowBox">
+                    <img src={bbqpattern} className="top-background" alt="Top-Background" />
+                    <div className="shadow"></div>
+                </div>
+                <h1>Agenda de Churras</h1>
+                <img src={trincaLogo} className="trinca-logo" />
+            </div>
+            <div className="content">
+                <Login />
+            </div>
+        </div>
+    );
 }
 
 export default App;

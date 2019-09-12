@@ -1,0 +1,18 @@
+.botao{
+    margin: 0px auto;
+    margin-top: 10vh;
+
+    background: black;
+    color: white;
+    width: 282px;
+    height: 50px;
+    border-radius: 16px;
+}
+
+.botao > span {
+    line-height: 50px;
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 18px;
+}

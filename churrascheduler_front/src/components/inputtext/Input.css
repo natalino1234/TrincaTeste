@@ -1,0 +1,36 @@
+.input{
+    width: 282px;
+    margin: 0px auto;
+    margin-bottom: 20px;
+
+    display: grid;
+    grid-template-areas: "texto" "entrada";
+    grid-template-columns: 282px;
+    grid-template-rows: 50px 50px;
+}
+
+.input > label {
+    grid-area: texto;
+    line-height: 50px;
+    text-align: left;
+
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 21px;
+}
+
+.input > input {
+    font-family: Raleway;
+    padding: 15px 20px;
+    grid-area: entrada;
+    border: none;
+    font-size: 18px;
+}
+
+.input input::placeholder {
+    font-family: Raleway;
+    font-style: italic;
+    font-weight: normal;
+    font-size: 18px;
+}
