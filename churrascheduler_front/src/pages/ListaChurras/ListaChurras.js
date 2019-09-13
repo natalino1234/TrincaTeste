@@ -1,43 +1,51 @@
 import React, { Component } from 'react';
-import './Cadastro.css';
-import Input from '../../components/inputtext/Input';
-import Botao from '../../components/botao/Botao';
+import './ListaChurras.css';
+import ItemChurras from '../../components/itemchurras/ItemChurras';
+import ItemCriarChurras from '../../components/itemcriarchurras/ItemCriarChurras';
 
-class Cadastro extends Component {
+class ListaChurras extends Component {
     render() {
         return (
-            <div className="Cadastro">
-                <Input
-                    name="nome"
-                    type="text"
-                    placeholder="nome"
-                    value=""
-                    onClick={() => {}}
-                    textLabel="Nome"
-                />
-                <Input
-                    name="login"
-                    type="text"
-                    placeholder="login"
-                    value=""
-                    onClick={() => { }}
-                    textLabel="Login"
-                />
-                <Input
-                    name="senha"
-                    type="password"
-                    placeholder="senha"
-                    value=""
-                    onClick={() => { }}
-                    textLabel="Senha"
-                />
-                <Botao
-                    texto="Cadastrar"
-                    onClick={() => { }}
-                />
+            <div className="ListaChurras">
+                <ItemChurras
+                    dataChurras="01/12"
+                    motivo={"Niver do Gui"}
+                    quantidadePessoas="1234"
+                    valorTotal="280" />
+                <ItemChurras
+                    dataChurras="01/12"
+                    motivo={"Niver do Gui"}
+                    quantidadePessoas="1234"
+                    valorTotal="280" />
+                <ItemChurras
+                    dataChurras="01/12"
+                    motivo={"Niver do Gui"}
+                    quantidadePessoas="1234"
+                    valorTotal="280" />
+                <ItemChurras
+                    dataChurras="01/12"
+                    motivo={"Niver do Gui"}
+                    quantidadePessoas="1234"
+                    valorTotal="280" />
+                <ItemChurras
+                    dataChurras="01/12"
+                    motivo={"Niver do Gui"}
+                    quantidadePessoas="1234"
+                    valorTotal="280" />
+                <ItemChurras
+                    dataChurras="01/12"
+                    motivo={"Niver do Gui"}
+                    quantidadePessoas="1234"
+                    valorTotal="280" />
+                <ItemChurras
+                    dataChurras="01/12"
+                    motivo={"Niver do Gui"}
+                    quantidadePessoas="1234"
+                    valorTotal="280" />
+                <ItemCriarChurras onClick={() => { }} />
             </div>
         );
     }
 }
 
-export default Cadastro;
+export default ListaChurras;

@@ -1,5 +1,5 @@
-.Cadastro{
+.ListaChurras{
     display: flex;
-    flex-flow: column;
-    justify-content: center;
+    flex-flow: row;
+    flex-wrap: wrap;
 }

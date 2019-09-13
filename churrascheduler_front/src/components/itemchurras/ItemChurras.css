@@ -1,0 +1,77 @@
+.item-churras *{
+    position: relative;
+}
+
+.item-churras {
+    width: 234px;
+    height: 150px;
+    font-family: Raleway;
+    font-style: normal;
+    background: white;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.06);
+    display: grid;
+    grid-template-areas: "data data" "motivo motivo" "pessoas dinheiro";
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 33px 92px 25px;
+    text-align: left;
+    padding: 21px 24px;
+    margin: 12px 12px;
+    border-radius: 2px;
+    flex-grow: 1;
+}
+
+.item-churras > h2 {
+    grid-area: data;
+    font-weight: 800;
+    font-size: 28px;
+    line-height: 33px;
+}
+
+.item-churras > h3 {
+    grid-area: motivo;
+    font-weight: bold;
+    font-size: 21px;
+    line-height: 25px;
+    color: rgba(0, 0, 0, 0.8);
+}
+.item-churras .people {
+    grid-area: pessoas;
+}
+
+.item-churras .money {
+    grid-area: dinheiro;
+}
+
+.item-churras .people,
+.item-churras .money{
+    height: 20px;
+
+    display: grid;
+    grid-gap: 10px;
+    grid-template-areas: "icone valor";
+    grid-template-columns: 25px auto;
+    grid-template-rows: 25px;
+}
+
+.item-churras img {
+    grid-area: icone;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.item-churras .people img {
+    width: 18px;
+    height: 15.3px;
+}
+
+.item-churras .money img {
+    width: 20px;
+    height: 20px;
+}
+
+.item-churras span {
+    grid-area: valor;
+    font-weight: 500;
+    font-size: 21px;
+    line-height: 25px;
+}

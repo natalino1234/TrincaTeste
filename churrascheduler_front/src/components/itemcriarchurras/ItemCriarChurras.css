@@ -1,0 +1,24 @@
+.item-criar-churras {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    background: #F1F1F1;
+}
+
+.item-criar-churras .elipse {
+    width: 90px;
+    height: 90px;
+    border-radius: 45px;
+    background: #FFD836;
+    margin: auto;
+}
+
+.item-criar-churras h3{
+    text-align: center;
+}
+
+.item-criar-churras .elipse img {
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+}
