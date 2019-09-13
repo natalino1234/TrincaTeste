@@ -66,5 +66,4 @@
 .App .content{
     padding-top: 156px;
     min-height: calc(100% - 156px);
-    overflow-y: auto;
 }

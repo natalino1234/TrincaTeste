@@ -1,0 +1,29 @@
+.lista-pessoas .item-lista-pessoas {
+    border-bottom: 1px solid rgba(229,194,49, 0.5);
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 50px auto 150px;
+    grid-template-rows: 25px;
+}
+
+.lista-pessoas .item-lista-pessoas .nome {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 21px;
+    line-height: 25px;
+}
+
+.lista-pessoas .item-lista-pessoas .valor {
+    font-family: Raleway;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 21px;
+    line-height: 25px;
+    text-align: right;
+}
+
+
+.lista-pessoas .item-lista-pessoas .pago {
+    text-decoration: line-through;
+}

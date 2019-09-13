@@ -5,6 +5,7 @@ import './App.css';
 import Login from './pages/Login/Login';
 import Cadastro from './pages/Cadastro/Cadastro';
 import ListaChurras from './pages/ListaChurras/ListaChurras';
+import DetalharChurras from './pages/DetalharChurras/DetalharChurras';
 
 class App extends Component {
 
@@ -31,7 +32,7 @@ class App extends Component {
                 <div className="App">
                     <h1 className="titulo">Agenda de Churras</h1>
                     <div className="content">
-                        <ListaChurras />
+                        <DetalharChurras />
                     </div>
                     <img src={trincaLogo} className="trinca-logo" />
                 </div>

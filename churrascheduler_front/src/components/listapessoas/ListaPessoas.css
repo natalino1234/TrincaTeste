@@ -1,0 +1,9 @@
+.lista-pessoas {
+    grid-area: lista;
+    margin-top: 20px;
+    border-collapse: collapse;
+}
+
+.lista-pessoas *{
+    position: relative;
+}
