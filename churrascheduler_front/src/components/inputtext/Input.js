@@ -4,7 +4,7 @@ import './Input.css';
 class Input extends Component {
     render() {
         return (
-            <div className="input" onClick={this.props.onClick} >
+            <div className={"input" + ((this.props.type === "checkbox" || this.props.type === "radio")?" selectable":"") }>
                 <label htmlFor={this.props.name}>{this.props.textLabel}</label>
                 <input
                     id={this.props.name}
@@ -14,6 +14,7 @@ class Input extends Component {
                     onChange={this.props.onChange}
                     placeholder={this.props.placeholder}
                 />
+                <span>{(this.props.type === "checkbox" || this.props.type === "radio") ? this.props.description : ""}</span>
             </div>
         );
     }

@@ -9,6 +9,12 @@
     grid-template-rows: 50px 50px;
 }
 
+.input.selectable {
+    grid-template-areas: "texto texto" "entrada description";
+    grid-template-columns: 50px 232px;
+    grid-template-rows: 50px 50px;
+}
+
 .input > label {
     grid-area: texto;
     line-height: 50px;
@@ -20,14 +26,14 @@
     font-size: 21px;
 }
 
-    .input > input {
-        font-family: Raleway;
-        padding: 15px 20px;
-        grid-area: entrada;
-        border: none;
-        font-size: 18px;
-        box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.06);
-    }
+.input > input {
+    font-family: Raleway;
+    padding: 15px 20px;
+    grid-area: entrada;
+    border: none;
+    font-size: 18px;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.06);
+}
 
 .input input::placeholder {
     font-family: Raleway;
@@ -35,3 +41,12 @@
     font-weight: normal;
     font-size: 18px;
 }
+
+    .input input[type=radio] + span,
+    .input input[type=checkbox] + span {
+        grid-area: description;
+        font-family: Raleway;
+        border: none;
+        font-size: 18px;
+        line-height: 50px;
+    }
