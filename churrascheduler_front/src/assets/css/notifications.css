@@ -1,0 +1,44 @@
+.toasts-container{
+    align-items: center !important;
+}
+.toasts-container > *{
+    background: rgb(26, 26, 26) !important;
+}
+
+.toasts-container > * > div{
+    margin: 10px 0px;
+    display: grid;
+    grid-template-areas: "icone mensagem";
+    grid-template-columns: 40px auto;
+    grid-gap: 10px;
+    align-items: center;
+}
+
+.toasts-container > *  i{
+    grid-area: icone;
+    font-size: 25pt;
+}
+
+.toasts-container > * i.fa-info-circle{
+    color: rgb(81, 116, 212);
+}
+
+.toasts-container > * i.fa-check-circle{
+    color: rgb(81, 212, 81);
+}
+
+.toasts-container > * i.fa-exclamation-circle{
+    color: rgb(212, 81, 81);
+}
+
+.toasts-container > * span{
+    grid-area: mensagem;
+    color: rgb(233, 233, 233);
+    text-align: left;
+}
+
+@media screen and (max-width: 900px){
+    .toasts-container{
+        width: 90%;
+    }
+}

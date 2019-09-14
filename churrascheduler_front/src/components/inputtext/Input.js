@@ -13,6 +13,7 @@ class Input extends Component {
                     value={this.props.value}
                     onChange={this.props.onChange}
                     placeholder={this.props.placeholder}
+                    required={(this.props.required)?"required":""}
                 />
                 <span>{(this.props.type === "checkbox" || this.props.type === "radio") ? this.props.description : ""}</span>
             </div>

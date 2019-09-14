@@ -1,26 +1,28 @@
 import React, { Component } from 'react';
-import bbqpattern from './assets/images/bbq-pattern.svg';
 import trincaLogo from './assets/images/trinca-logo.svg';
 import './App.css';
-import Login from './pages/Login/Login';
-import Cadastro from './pages/Cadastro/Cadastro';
-import ListaChurras from './pages/ListaChurras/ListaChurras';
-import DetalharChurras from './pages/DetalharChurras/DetalharChurras';
-import NovoChurrasco from './pages/NovoChurrasco/NovoChurrasco';
 import { routes } from './assets/js/routesConfig';
-import { Route } from 'react-router-dom/cjs/react-router-dom';
+import { Route, Redirect } from 'react-router-dom/cjs/react-router-dom';
+import { ToastsContainerPosition, ToastsStore, ToastsContainer } from 'react-toasts';
 
 class App extends Component {
 
     constructor(props){
         super(props);
+        this.state = {
+            redirect: false
+        }
         this.getFundoLogado = this.getFundoLogado.bind(this);
     }
 
     getFundoLogado() {
         let auth = window.localStorage.getItem("authToken");
         if (auth !== null) {
+            document.getElementsByTagName("html")[0].style.background = "white";
             return <div className="background-branco" />;
+        } else {
+
+            document.getElementsByTagName("html")[0].style.background = "#FFD836";
         }
         return "";
     }
@@ -47,6 +49,7 @@ class App extends Component {
                     </div>
                     <img src={trincaLogo} className="trinca-logo" />
                 </div>
+                <ToastsContainer store={ToastsStore} position={ToastsContainerPosition.BOTTOM_CENTER} />
             </div>
         );
     }

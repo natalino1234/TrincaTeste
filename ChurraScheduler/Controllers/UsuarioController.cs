@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Modelos;
 using BancoDeDados.Impl;
+using Microsoft.AspNetCore.Cors;
 
 namespace ChurraScheduler.Controllers
 {
@@ -57,7 +58,7 @@ namespace ChurraScheduler.Controllers
                         "usuario " +
                         "where " +
                         "login = '" + usuario.Login + "' " +
-                        "AND senha = '" + usuario.Senha + "';"});
+                        "AND senha = '" + usuario.Senha + "';", login, senha});
                     }
                 }
                 finally
@@ -94,10 +95,10 @@ namespace ChurraScheduler.Controllers
                         "   login = \"" + usuario.Login + "\";");
                     if (logado.Count == 0)
                     {
-                        Usuario u = logado[0];
+                        Usuario u = usuario;
                         u.AuthToken = Utils.Utils.alfanumericoAleatorio(25);
                         dao.Insert(u);
-                        j = new JsonResult(new object[] { true, u.Login, u.AuthToken, u.Nome });
+                        j = new JsonResult(new object[] { true, u.AuthToken });
                     }
                     else
                     {
@@ -110,9 +111,9 @@ namespace ChurraScheduler.Controllers
                     dao.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador." });
+                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador.", e.StackTrace });
             }
             return j;
         }

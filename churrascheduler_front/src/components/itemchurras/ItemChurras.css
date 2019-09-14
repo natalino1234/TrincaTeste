@@ -3,6 +3,8 @@
 }
 
 .item-churras {
+    user-select: none;
+    cursor: pointer;
     width: 234px;
     height: 150px;
     font-family: Raleway;
@@ -18,6 +20,14 @@
     margin: 12px 12px;
     border-radius: 2px;
     flex-grow: 1;
+}
+
+.item-churras:link,
+.item-churras:active,
+.item-churras:hover,
+.item-churras:visited{
+    text-decoration: none;
+    color: inherit;
 }
 
 .item-churras > h2 {

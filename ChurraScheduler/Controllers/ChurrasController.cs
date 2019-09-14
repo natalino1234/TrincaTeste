@@ -117,7 +117,7 @@ namespace ChurraScheduler.Controllers
                     ChurrasDAO dao = new ChurrasDAO(local);
                     try
                     {
-                        List<Churras> churras = dao.FindAll_Custom("Select * from churras where id_usuario = "+usuario.Id);
+                        List<Churras> churras = dao.FindAll_Custom("Select c.* from churras c, usuario u where c.id_usuario = u.id and u.authtoken = "+usuario.Id);
                         dao.Close();
                         j = new JsonResult(new object[] { true, churras });
                     }

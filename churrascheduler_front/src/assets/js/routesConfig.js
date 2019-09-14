@@ -24,7 +24,7 @@ export const routes = [
         needLogin: true
     },
     {
-        path: "/Listar",
+        path: "/",
         component: ListaChurras,
         exact: true,
         needLogin: true
