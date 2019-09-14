@@ -65,7 +65,7 @@ class Cadastro extends Component {
                     type="text"
                     placeholder="login"
                     value={this.state.login}
-                    onChange={(evt) => { this.setState({ login: evt.target.login }); }}
+                    onChange={(evt) => { this.setState({ login: evt.target.value }); }}
                     textLabel="Login"
                 />
                 <Input

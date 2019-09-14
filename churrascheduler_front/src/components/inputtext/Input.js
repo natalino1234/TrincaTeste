@@ -13,7 +13,11 @@ class Input extends Component {
                     value={this.props.value}
                     onChange={this.props.onChange}
                     placeholder={this.props.placeholder}
-                    required={(this.props.required)?"required":""}
+                    required={(this.props.required) ? "required" : ""}
+                    checked={this.props.value}
+                    min={this.props.min}
+                    max={this.props.max}
+                    step={this.props.step}
                 />
                 <span>{(this.props.type === "checkbox" || this.props.type === "radio") ? this.props.description : ""}</span>
             </div>

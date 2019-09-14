@@ -10,9 +10,13 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-            redirect: false
+            redirect: false,
+            logado: window.localStorage.getItem("authToken") !== null
         }
         this.getFundoLogado = this.getFundoLogado.bind(this);
+        this.logout = this.logout.bind(this);
+        this.getBotaoSair = this.getBotaoSair.bind(this);
+
     }
 
     getFundoLogado() {
@@ -21,10 +25,22 @@ class App extends Component {
             document.getElementsByTagName("html")[0].style.background = "white";
             return <div className="background-branco" />;
         } else {
-
             document.getElementsByTagName("html")[0].style.background = "#FFD836";
         }
         return "";
+    }
+
+    getBotaoSair() {
+        if (this.state.logado) {
+            return <div className="logout" onClick={this.logout}>Sair</div>
+        } else {
+            return "";
+        }
+    }
+
+    logout() {
+        window.localStorage.removeItem("authToken");
+        window.location.href = "/";
     }
 
     render() {
@@ -47,6 +63,7 @@ class App extends Component {
                             }
                         })}
                     </div>
+                    {this.getBotaoSair()}
                     <img src={trincaLogo} className="trinca-logo" />
                 </div>
                 <ToastsContainer store={ToastsStore} position={ToastsContainerPosition.BOTTOM_CENTER} />

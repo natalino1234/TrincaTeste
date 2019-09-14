@@ -31,7 +31,7 @@ namespace ChurraScheduler.Controllers
                 UsuarioDAO dao = new UsuarioDAO(local);
                 try
                 {
-                    List<Usuario> logado = dao.FindAll_Custom("" +
+                    List<dynamic> logado = dao.FindAll_Custom("" +
                         "Select " +
                         " * " +
                         "from " +
@@ -41,7 +41,7 @@ namespace ChurraScheduler.Controllers
                         "AND senha = '" + usuario.Senha + "';");
                     if (logado.Count > 0)
                     {
-                        Usuario u = logado[0];
+                        Usuario u = dao.Find(Convert.ToInt32(logado[0].id));
                         u.AuthToken = Utils.Utils.alfanumericoAleatorio(25);
                         dao.Update(u);
                         dao.Close();
@@ -50,7 +50,7 @@ namespace ChurraScheduler.Controllers
                     else
                     {
                         dao.Close();
-                        j = new JsonResult(new object[] { "false", "Usuário não encontrado.",
+                        j = new JsonResult(new object[] { false, "Usuário não encontrado.",
                         "" +
                         "Select " +
                         " * " +
@@ -66,9 +66,9 @@ namespace ChurraScheduler.Controllers
                     dao.Close();
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                j = new JsonResult(new object[] { "false", "Houve uma falha ao executar, contate o administrador." });
+                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador.", e.Message, e.StackTrace });
             }
             return j;
         }
@@ -86,7 +86,7 @@ namespace ChurraScheduler.Controllers
                 string local = appSettings["DatabasePath"] ?? "Not Found";
                 UsuarioDAO dao = new UsuarioDAO(local);
                 try { 
-                    List<Usuario> logado = dao.FindAll_Custom("" +
+                    List<dynamic> logado = dao.FindAll_Custom("" +
                         "Select " +
                         "   * " +
                         "from " +
@@ -133,7 +133,7 @@ namespace ChurraScheduler.Controllers
                 UsuarioDAO dao = new UsuarioDAO(local);
                 try
                 {
-                    List<Usuario> logado = dao.FindAll_Custom("" +
+                    List<dynamic> logado = dao.FindAll_Custom("" +
                         "Select " +
                         "   * " +
                         "from " +
@@ -146,12 +146,12 @@ namespace ChurraScheduler.Controllers
                         u.AuthToken = Utils.Utils.alfanumericoAleatorio(25);
                         dao.Insert(u);
                         dao.Close();
-                        j = new JsonResult(new string[] { "true", u.Login, u.AuthToken, u.Nome });
+                        j = new JsonResult(new object[] { true, u.Login, u.AuthToken, u.Nome });
                     }
                     else
                     {
                         dao.Close();
-                        j = new JsonResult(new string[] { "false", "Este login já está sendo utilizado." });
+                        j = new JsonResult(new object[] { false, "Este login já está sendo utilizado." });
                     }
                 }
                 finally
@@ -161,7 +161,7 @@ namespace ChurraScheduler.Controllers
             }
             catch (Exception e)
             {
-                j = new JsonResult(new string[] { "false", "Houve uma falha ao executar, contate o administrador.", e.StackTrace });
+                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador.", e.StackTrace });
             }
             return j;
         }
@@ -180,7 +180,7 @@ namespace ChurraScheduler.Controllers
                 UsuarioDAO dao = new UsuarioDAO(local);
                 try
                 {
-                    List<Usuario> usuarios = dao.FindAll();
+                    List<dynamic> usuarios = dao.FindAll_Custom("select * from usuario");
                     dao.Close();
                     j = new JsonResult(new object[] {true, usuarios });
                 }

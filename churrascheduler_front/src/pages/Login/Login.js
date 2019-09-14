@@ -29,6 +29,7 @@ class Login extends Component {
             return;
         }
         let callback = (result) => {
+            console.log(result);
             if (result === null) {
                 alert.error("Houve algum erro no processamento, tente novamente.");
             } else {

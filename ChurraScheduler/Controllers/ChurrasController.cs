@@ -17,15 +17,15 @@ namespace ChurraScheduler.Controllers
         [HttpPost]
         [Route("Create")]
         public JsonResult CreateChurras(
-            int id_usuario, string authToken,
-            string nome, string observacoes, string data, 
+            string authToken,
+            string descricao, string observacoes, string data, 
             string valorParticipante, string bebidaIncluida)
         {
 
-            Usuario usuario = new Usuario(id_usuario, "", "", "", authToken);
+            Usuario usuario = new Usuario("", "", "", authToken);
 
             Churras churras = new Churras(
-                nome, 
+                descricao, 
                 observacoes, 
                 Convert.ToDateTime(data), 
                 Convert.ToDouble(valorParticipante), 
@@ -40,38 +40,23 @@ namespace ChurraScheduler.Controllers
                 ChurrasDAO dao = new ChurrasDAO(local);
 
                 UsuarioDAO daouser = new UsuarioDAO(local);
-                if (daouser.FindAll_Custom("Select * from usuario where authtoken = \"" + usuario.AuthToken + "\" and login = \"" + usuario.Login + "\"").Count > 0)
+                List<dynamic> usuarioSelecionado = daouser.FindAll_Custom("Select * from usuario where authToken = \"" + authToken + "\"");
+                if (usuarioSelecionado.Count > 0)
                 {
+                    usuario = daouser.Find(Convert.ToInt32(usuarioSelecionado[0].id));
                     try
                     {
-                        List<Churras> churs = dao.FindAll_Custom("" +
+                        dao.Insert(churras);
+
+                        List<dynamic> churs = dao.FindAll_Custom("" +
                             "Select " +
                             "   * " +
                             "from " +
                             "   churras " +
                             "where " +
-                            "   nome = \"" + churras.Nome + "\" " +
-                            "   and id_usuario = " + usuario.Id + ";");
-                        if (churs.Count == 0)
-                        {
-                            dao.Insert(churras);
-
-                            churs = dao.FindAll_Custom("" +
-                                "Select " +
-                                "   * " +
-                                "from " +
-                                "   churras " +
-                                "where " +
-                                "   nome = \"" + churras.Nome + "\" " +
-                                "   and id_usuario = " + usuario.Id + ";");
-                            churras = churs[0];
-                            j = new JsonResult(new object[] { true, churras });
-                        }
-                        else
-                        {
-                            dao.Close();
-                            j = new JsonResult(new object[] { false, "Você já possui um churrasco marcado com esse nome, tente outro." });
-                        }
+                            "   id_usuario = " + usuario.Id + " order by id desc LIMIT 1;");
+                        j = new JsonResult(new object[] { true, churs[0] });
+                        
                     }
                     finally
                     {
@@ -80,12 +65,12 @@ namespace ChurraScheduler.Controllers
                 }
                 else
                 {
-                    j = new JsonResult(new object[] { false, "Você não tem permissão para acessar essas informações." });
+                    j = new JsonResult(new object[] { false, "Você não tem permissão para acessar essas informações.", "Select * from usuario where authtoken = \"" + authToken + "\"" });
                 }
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador." });
+                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador.", e.Message, e.StackTrace });
             }
             return j;
         }
@@ -101,10 +86,10 @@ namespace ChurraScheduler.Controllers
         // POST api/Churras/List
         [HttpPost]
         [Route("List")]
-        public ActionResult<IEnumerable<string>> ListChurras(int id_usuario, string authToken)
+        public ActionResult<IEnumerable<string>> ListChurras(string authToken)
         {
 
-            Usuario usuario = new Usuario(id_usuario, "", "", "", authToken);
+            var usuario = new Usuario("", "", "", authToken);
 
             JsonResult j;
 
@@ -113,11 +98,12 @@ namespace ChurraScheduler.Controllers
             try
             {
                 UsuarioDAO daouser = new UsuarioDAO(local);
-                if(daouser.FindAll_Custom("Select * from usuario where authtoken = \""+usuario.AuthToken+"\" and login = \"" + usuario.Login + "\"").Count > 0) { 
+                List<dynamic> usuarioSelecionado = daouser.FindAll_Custom("Select * from usuario where authToken = \"" + usuario.AuthToken + "\"");
+                if (usuarioSelecionado.Count > 0) {
                     ChurrasDAO dao = new ChurrasDAO(local);
                     try
                     {
-                        List<Churras> churras = dao.FindAll_Custom("Select c.* from churras c, usuario u where c.id_usuario = u.id and u.authtoken = "+usuario.Id);
+                        List<dynamic> churras = dao.FindAll_Custom("Select c.nome, c.dataChurras, count(cp.id) qtdParticipantes, (count(cp.id) * c.valor_individual) valorTotal from churras c left join ChurrasParticipante cp on (c.id = cp.id_churras) where c.id_usuario = " + usuarioSelecionado[0].id);
                         dao.Close();
                         j = new JsonResult(new object[] { true, churras });
                     }
@@ -125,12 +111,12 @@ namespace ChurraScheduler.Controllers
                 }
                 else
                 {
-                    j = new JsonResult(new object[] { false, "Você não tem permissão para acessar essas informações." });
+                    j = new JsonResult(new object[] { false, "Você não tem permissão para acessar essas informações.", "Select * from usuario where authToken = \"" + usuario.AuthToken + "\"" });
                 }
             }
             catch (Exception e)
             {
-                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador.", local, e.StackTrace });
+                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador.", local, e.Message, e.StackTrace });
             }
             return j;
         }
@@ -154,7 +140,7 @@ namespace ChurraScheduler.Controllers
                     ChurrasDAO dao = new ChurrasDAO(local);
                     try
                     {
-                        List<Churras> churras = dao.FindAll_Custom("Select * from churras where id_usuario = " + usuario.Id+" and id = "+id);
+                        List<dynamic> churras = dao.FindAll_Custom("Select * from churras where id_usuario = " + usuario.Id+" and id = "+id);
                         dao.Close();
                         j = new JsonResult(new object[] { true, churras });
                     }

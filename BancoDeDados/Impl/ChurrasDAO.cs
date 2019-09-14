@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -15,6 +16,7 @@ namespace BancoDeDados.Impl
 
         protected override void CreateTable()
         {
+            Console.WriteLine("teste");
             try
             {
                 using (var cmd = sqliteConnection.CreateCommand())
@@ -59,32 +61,25 @@ namespace BancoDeDados.Impl
         {
             SQLiteDataAdapter da;
             DataTable dt = new DataTable();
-            try
+            using (var cmd = sqliteConnection.CreateCommand())
             {
-                using (var cmd = sqliteConnection.CreateCommand())
+                cmd.CommandText = "SELECT * FROM Churras Where Id =" + id;
+                da = new SQLiteDataAdapter(cmd.CommandText, sqliteConnection);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
                 {
-                    cmd.CommandText = "SELECT * FROM Churras Where Id =" + id;
-                    da = new SQLiteDataAdapter(cmd.CommandText, sqliteConnection);
-                    da.Fill(dt);
-                    if (dt.Rows.Count > 0)
-                    {
-                        Churras churras = new Churras(
-                            Convert.ToInt32(dt.Rows[0]["id"].ToString()),
-                            Convert.ToInt32(dt.Rows[0]["id_usuario"].ToString()),
-                            dt.Rows[0]["observacoes"].ToString(),
-                            dt.Rows[0]["nome"].ToString(),
-                            Convert.ToDateTime(dt.Rows[0]["dataChurras"].ToString()),
-                            Convert.ToDouble(dt.Rows[0]["valor_individual"].ToString()),
-                            Convert.ToBoolean(dt.Rows[0]["bebida_incluida"].ToString())
-                        );
-                        return churras;
-                    }
-                    return null;
+                    Churras churras = new Churras(
+                        Convert.ToInt32(dt.Rows[0]["id"].ToString()),
+                        Convert.ToInt32(dt.Rows[0]["id_usuario"].ToString()),
+                        dt.Rows[0]["observacoes"].ToString(),
+                        dt.Rows[0]["nome"].ToString(),
+                        Convert.ToDateTime(dt.Rows[0]["dataChurras"].ToString()),
+                        Convert.ToDouble(dt.Rows[0]["valor_individual"].ToString()),
+                        Convert.ToBoolean(dt.Rows[0]["bebida_incluida"].ToString())
+                    );
+                    return churras;
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                return null;
             }
         }
 
@@ -125,42 +120,31 @@ namespace BancoDeDados.Impl
             return churrasList;
         }
 
-        public override List<Churras> FindAll_Custom(string sql)
+        public override List<dynamic> FindAll_Custom(string sql)
         {
             SQLiteDataAdapter da;
             DataTable dt = new DataTable();
-            List<Churras> churrasList = new List<Churras>();
-            try
+            List<dynamic> churrasList = new List<dynamic>();
+            using (var cmd = sqliteConnection.CreateCommand())
             {
-                using (var cmd = sqliteConnection.CreateCommand())
+                cmd.CommandText = sql;
+                da = new SQLiteDataAdapter(cmd.CommandText, sqliteConnection);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
                 {
-                    cmd.CommandText = sql;
-                    da = new SQLiteDataAdapter(cmd.CommandText, sqliteConnection);
-                    da.Fill(dt);
-                    if (dt.Rows.Count > 0)
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        foreach (DataRow dr in dt.Rows)
-                        {
-                            Churras churras = new Churras(
-                                Convert.ToInt32(dr["id"].ToString()),
-                                Convert.ToInt32(dr["id_usuario"].ToString()),
-                                dr["observacoes"].ToString(),
-                                dr["nome"].ToString(),
-                                Convert.ToDateTime(dr["dataChurras"].ToString()),
-                                Convert.ToDouble(dr["valor_individual"].ToString()),
-                                Convert.ToBoolean(dr["bebida_incluida"].ToString())
-                            );
-                            ChurrasParticipanteDAO partDao = new ChurrasParticipanteDAO(Conn);
 
-                            churras.participantes = partDao.FindAll_Custom("Select * from ChurrasParticipante where id_churras = "+churras.Id);
-                            churrasList.Add(churras);
+                        var properties = new ExpandoObject() as IDictionary<string, Object>;
+
+                        for (int i = 0; i < dr.ItemArray.Length; i++)
+                        {
+                            properties.Add(dr.Table.Columns[i].ColumnName, dr.ItemArray[i]);
                         }
+
+                        churrasList.Add(properties);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
             return churrasList;
         }

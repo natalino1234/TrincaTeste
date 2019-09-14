@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
 using System.Text;
+using System.Dynamic;
 using Modelos;
 
 namespace BancoDeDados.Impl
@@ -113,39 +114,33 @@ namespace BancoDeDados.Impl
             return UsuarioList;
         }
 
-        public override List<Usuario> FindAll_Custom(string sql)
+        public override List<dynamic> FindAll_Custom(string sql)
         {
             SQLiteDataAdapter da;
             DataTable dt = new DataTable();
-            List<Usuario> UsuarioList = new List<Usuario>();
-            try
+            List<dynamic> usuarioList = new List<dynamic>();
+            using (var cmd = sqliteConnection.CreateCommand())
             {
-                using (var cmd = sqliteConnection.CreateCommand())
+                cmd.CommandText = sql;
+                da = new SQLiteDataAdapter(cmd.CommandText, sqliteConnection);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
                 {
-                    cmd.CommandText = sql;
-                    da = new SQLiteDataAdapter(cmd.CommandText, sqliteConnection);
-                    da.Fill(dt);
-                    if (dt.Rows.Count > 0)
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        foreach (DataRow dr in dt.Rows)
+
+                        var properties = new ExpandoObject() as IDictionary<string, Object>;
+
+                        for (int i = 0; i < dr.ItemArray.Length; i++)
                         {
-                            Usuario Usuario = new Usuario(
-                                Convert.ToInt32(dr["id"].ToString()),
-                                dr["login"].ToString(),
-                                dr["senha"].ToString(),
-                                dr["nome"].ToString(),
-                                dr["authtoken"].ToString()
-                            );
-                            UsuarioList.Add(Usuario);
+                            properties.Add(dr.Table.Columns[i].ColumnName, dr.ItemArray[i]);
                         }
+
+                        usuarioList.Add(properties);
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            return UsuarioList;
+            return usuarioList;
         }
 
         public override void Insert(Usuario t)

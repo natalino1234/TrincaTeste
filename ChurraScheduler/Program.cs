@@ -8,6 +8,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using BancoDeDados.Impl;
 
 namespace ChurraScheduler
 {
@@ -30,6 +31,10 @@ namespace ChurraScheduler
             }
             configFile.Save(ConfigurationSaveMode.Modified);
             ConfigurationManager.RefreshSection(configFile.AppSettings.SectionInformation.Name);
+
+            new UsuarioDAO(value);
+            new ChurrasDAO(value);
+            new ChurrasParticipanteDAO(value);
 
             CreateWebHostBuilder(args).Build().Run();
         }

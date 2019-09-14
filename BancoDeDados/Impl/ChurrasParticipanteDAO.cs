@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Dynamic;
 using Modelos;
 
 namespace BancoDeDados.Impl
@@ -117,11 +118,11 @@ namespace BancoDeDados.Impl
         }
 
 
-        public override List<ChurrasParticipante> FindAll_Custom(string sql)
+        public override List<dynamic> FindAll_Custom(string sql)
         {
             SQLiteDataAdapter da;
             DataTable dt = new DataTable();
-            List<ChurrasParticipante> ChurrasParticipanteList = new List<ChurrasParticipante>();
+            List<dynamic> participantesList = new List<dynamic>();
             try
             {
                 using (var cmd = sqliteConnection.CreateCommand())
@@ -133,13 +134,15 @@ namespace BancoDeDados.Impl
                     {
                         foreach (DataRow dr in dt.Rows)
                         {
-                            ChurrasParticipante ChurrasParticipante = new ChurrasParticipante(
-                                Convert.ToInt32(dr["id"].ToString()),
-                                Convert.ToInt32(dr["id_churras"].ToString()),
-                                dr["nome_participante"].ToString(),
-                                Convert.ToBoolean(dr["pago"].ToString())
-                            );
-                            ChurrasParticipanteList.Add(ChurrasParticipante);
+
+                            var properties = new ExpandoObject() as IDictionary<string, Object>;
+
+                            for (int i = 0; i < dr.ItemArray.Length; i++)
+                            {
+                                properties.Add(dr.Table.Columns[i].ColumnName, dr.ItemArray[i]);
+                            }
+
+                            participantesList.Add(properties);
                         }
                     }
                 }
@@ -148,7 +151,7 @@ namespace BancoDeDados.Impl
             {
                 throw ex;
             }
-            return ChurrasParticipanteList;
+            return participantesList;
         }
 
         public override void Insert(ChurrasParticipante t)

@@ -56,7 +56,7 @@ namespace BancoDeDados
         public abstract void Delete(T t);
         public abstract T Find(int id);
         public abstract List<T> FindAll();
-        public abstract List<T> FindAll_Custom(string sql);
+        public abstract List<dynamic> FindAll_Custom(string sql);
 
     }
 }
