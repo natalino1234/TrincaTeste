@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import trincaLogo from './assets/images/trinca-logo.svg';
 import './App.css';
 import { routes } from './assets/js/routesConfig';
-import { Route, Redirect } from 'react-router-dom/cjs/react-router-dom';
+import { Route, Link } from 'react-router-dom/cjs/react-router-dom';
 import { ToastsContainerPosition, ToastsStore, ToastsContainer } from 'react-toasts';
 
 class App extends Component {
@@ -16,6 +16,7 @@ class App extends Component {
         this.getFundoLogado = this.getFundoLogado.bind(this);
         this.logout = this.logout.bind(this);
         this.getBotaoSair = this.getBotaoSair.bind(this);
+        this.getBotaoMenu = this.getBotaoMenu.bind(this);
 
     }
 
@@ -33,6 +34,14 @@ class App extends Component {
     getBotaoSair() {
         if (this.state.logado) {
             return <div className="logout" onClick={this.logout}>Sair</div>
+        } else {
+            return "";
+        }
+    }
+
+    getBotaoMenu() {
+        if (this.state.logado) {
+            return <Link to="/"><i className="fas fa-list func list" /></Link>
         } else {
             return "";
         }
@@ -64,6 +73,7 @@ class App extends Component {
                         })}
                     </div>
                     {this.getBotaoSair()}
+                    {this.getBotaoMenu()}
                     <img src={trincaLogo} className="trinca-logo" />
                 </div>
                 <ToastsContainer store={ToastsStore} position={ToastsContainerPosition.BOTTOM_CENTER} />

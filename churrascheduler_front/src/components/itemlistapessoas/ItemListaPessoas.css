@@ -4,6 +4,13 @@
     display: grid;
     grid-template-columns: 50px auto 150px;
     grid-template-rows: 25px;
+    user-select: none;
+    transition: background .5s ease;
+}
+
+.lista-pessoas .item-lista-pessoas:hover{
+    cursor: pointer;
+    background: rgb(241, 241, 241);
 }
 
 .lista-pessoas .item-lista-pessoas .nome {

@@ -56,6 +56,7 @@ class ListaChurras extends Component {
                 motivo={value.Nome}
                 quantidadePessoas={value.qtdParticipantes}
                 valorTotal={value.valorTotal}
+                to={"/Detalhar?id="+value.id}
             />
         });
     }

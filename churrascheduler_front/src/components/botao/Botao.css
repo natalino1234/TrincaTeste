@@ -1,6 +1,6 @@
 .botao {
     margin: 0px auto;
-    margin-top: 50px;
+    margin-top: 25px;
     background: black;
     color: white;
     width: 282px;
@@ -24,5 +24,17 @@
 a.botao:link, a.botao:hover, a.botao:active, a.botao:visited {
     text-decoration: none;
     color: white;
+}
+
+.botao.vermelho{
+    background: rgb(183, 0, 0);
+}
+
+.botao.verde {
+    background: rgb(69, 183, 0);
+}
+
+.botao.azul {
+    background: rgb(0, 37, 183);
 }
 

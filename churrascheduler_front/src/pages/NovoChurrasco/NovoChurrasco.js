@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './NovoChurrasco.css';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import Input from '../../components/inputtext/Input';
 import Botao from '../../components/botao/Botao';
 import { alert } from '../../assets/js/Notifications';
@@ -128,6 +128,8 @@ class NovoChurrasco extends Component {
                     texto="Criar"
                     onClick={this.novoChurrasco}
                 />
+
+                <Link to="/"><i className="fas fa-list func list" /></Link>
                 {this.renderRedirect()}
             </div>
         );

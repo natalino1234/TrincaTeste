@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 class ItemChurras extends Component {
     render() {
         return (
-            <Link className="item-churras" onClick={this.props.onClick} >
+            <Link className="item-churras" to={this.props.to} >
                 <h2>{this.props.dataChurras}</h2>
                 <h3>{this.props.motivo}</h3>
                 <div className="people">

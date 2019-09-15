@@ -84,3 +84,9 @@
     font-size: 21px;
     line-height: 25px;
 }
+
+@media screen and (max-width: 400px){
+    .item-churras{
+        flex-grow: 1;
+    }
+}

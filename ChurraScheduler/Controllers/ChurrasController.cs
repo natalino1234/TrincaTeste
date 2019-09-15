@@ -46,6 +46,7 @@ namespace ChurraScheduler.Controllers
                     usuario = daouser.Find(Convert.ToInt32(usuarioSelecionado[0].id));
                     try
                     {
+                        churras.Id_usuario = usuario.Id;
                         dao.Insert(churras);
 
                         List<dynamic> churs = dao.FindAll_Custom("" +
@@ -103,9 +104,83 @@ namespace ChurraScheduler.Controllers
                     ChurrasDAO dao = new ChurrasDAO(local);
                     try
                     {
-                        List<dynamic> churras = dao.FindAll_Custom("Select c.nome, c.dataChurras, count(cp.id) qtdParticipantes, (count(cp.id) * c.valor_individual) valorTotal from churras c left join ChurrasParticipante cp on (c.id = cp.id_churras) where c.id_usuario = " + usuarioSelecionado[0].id);
+                        List<dynamic> churras = dao.FindAll_Custom(@"
+                            Select 
+                                c.id,
+                                c.nome, 
+                                c.dataChurras, 
+                                count(cp.id) qtdParticipantes, 
+                                (count(cp.id) * c.valor_individual) valorTotal 
+                            from 
+                                churras c 
+                                left join ChurrasParticipante cp on (c.id = cp.id_churras) 
+                            where 
+                                c.id_usuario = " + usuarioSelecionado[0].id+ @"
+                            group by
+	                            c.id,c.nome, c.dataChurras");
                         dao.Close();
                         j = new JsonResult(new object[] { true, churras });
+                    }
+                    finally { dao.Close(); }
+                }
+                else
+                {
+                    j = new JsonResult(new object[] { false, "Você não tem permissão para acessar essas informações.", "Select * from usuario where authToken = \"" + usuario.AuthToken + "\"" });
+                }
+            }
+            catch (Exception e)
+            {
+                j = new JsonResult(new object[] { false, "Houve uma falha ao executar, contate o administrador.", local, e.Message, e.StackTrace });
+            }
+            return j;
+        }
+
+        // POST api/Churras/List
+        [HttpPost]
+        [Route("Detail")]
+        public ActionResult<IEnumerable<string>> DetailChurras(string authToken, string id)
+        {
+
+            var usuario = new Usuario("", "", "", authToken);
+
+            JsonResult j;
+
+            var appSettings = ConfigurationManager.AppSettings;
+            string local = appSettings["DatabasePath"] ?? "Not Found";
+            try
+            {
+                UsuarioDAO daouser = new UsuarioDAO(local);
+                List<dynamic> usuarioSelecionado = daouser.FindAll_Custom("Select * from usuario where authToken = \"" + usuario.AuthToken + "\"");
+                if (usuarioSelecionado.Count > 0)
+                {
+                    ChurrasDAO dao = new ChurrasDAO(local);
+                    try
+                    {
+                        List<dynamic> churras = dao.FindAll_Custom(@"
+                            Select 
+                                c.id,
+                                c.nome, 
+                                c.dataChurras,
+                                c.valor_individual,
+                                count(cp.id) qtdParticipantes, 
+                                (count(cp.id) * c.valor_individual) valorTotal 
+                            from 
+                                churras c 
+                                left join ChurrasParticipante cp on (c.id = cp.id_churras) 
+                            where 
+                                c.id = " + id + @"
+                            group by
+	                            c.id,c.nome, c.dataChurras");
+
+                        List<dynamic> participantes = dao.FindAll_Custom(@"
+                            Select 
+                                * 
+                            from 
+                                ChurrasParticipante cp
+                            where 
+                                cp.id_churras = " + id);
+                        dao.Close();
+                        j = new JsonResult(new object[] { true, churras[0], participantes });
                     }
                     finally { dao.Close(); }
                 }
@@ -160,8 +235,8 @@ namespace ChurraScheduler.Controllers
 
         // POST api/Churras/AddParticipante
         [HttpPost]
-        [Route("AdicionarParticipante")]
-        public ActionResult<IEnumerable<string>> AddParticipanteChurras(string authToken, int id_churras, string nome)
+        [Route("AddParticipante")]
+        public ActionResult<IEnumerable<string>> AddParticipanteChurras(string authToken, int id_churras, string nome, string pago)
         {
 
             Usuario usuario = new Usuario("", "", "", authToken);
@@ -172,12 +247,12 @@ namespace ChurraScheduler.Controllers
             try
             {
                 UsuarioDAO daouser = new UsuarioDAO(local);
-                if (daouser.FindAll_Custom("Select * from usuario where authtoken = \"" + usuario.AuthToken + "\" and login = \"" + usuario.Login + "\"").Count > 0)
+                if (daouser.FindAll_Custom("Select * from usuario where authtoken = \"" + usuario.AuthToken + "\"").Count > 0)
                 {
                     ChurrasParticipanteDAO dao = new ChurrasParticipanteDAO(local);
                     try
                     {
-                        ChurrasParticipante participante = new ChurrasParticipante(id_churras, nome, false);
+                        ChurrasParticipante participante = new ChurrasParticipante(id_churras, nome, Convert.ToBoolean(pago));
                         dao.Insert(participante);
 
                         j = new JsonResult(new object[] { true,  dao.FindAll_Custom("Select * from churrasparticipante where id_churras = "+id_churras)});
@@ -200,8 +275,8 @@ namespace ChurraScheduler.Controllers
 
         // POST api/Churras/AddParticipante
         [HttpPost]
-        [Route("RemoverParticipante")]
-        public ActionResult<IEnumerable<string>> RemParticipanteChurras(string authToken, int id_participante, int id_churras)
+        [Route("RemParticipante")]
+        public ActionResult<IEnumerable<string>> RemParticipanteChurras(string authToken, string id_churras, string id_participante)
         {
 
             Usuario usuario = new Usuario("", "", "", authToken);
@@ -212,12 +287,12 @@ namespace ChurraScheduler.Controllers
             try
             {
                 UsuarioDAO daouser = new UsuarioDAO(local);
-                if (daouser.FindAll_Custom("Select * from usuario where authtoken = \"" + usuario.AuthToken + "\" and login = \"" + usuario.Login + "\"").Count > 0)
+                if (daouser.FindAll_Custom("Select * from usuario where authtoken = \"" + usuario.AuthToken + "\"").Count > 0)
                 {
                     ChurrasParticipanteDAO dao = new ChurrasParticipanteDAO(local);
                     try
                     {
-                        ChurrasParticipante participante = new ChurrasParticipante(id_participante ,id_churras, "", false);
+                        ChurrasParticipante participante = new ChurrasParticipante(Convert.ToInt32(id_participante), Convert.ToInt32(id_churras), "", false);
                         dao.Delete(participante);
 
                         j = new JsonResult(new object[] { true, dao.FindAll_Custom("Select * from churrasparticipante where id_churras = " + id_churras) });
@@ -238,13 +313,12 @@ namespace ChurraScheduler.Controllers
             return j;
         }
 
-        // POST api/Churras/AddParticipante
+        // POST api/Churras/EditParticipante
         [HttpPost]
-        [Route("ParticipantePagou")]
-        public ActionResult<IEnumerable<string>> ParticipantePagouChurras(string authToken, int id_churras, int id_participante)
+        [Route("EditParticipante")]
+        public ActionResult<IEnumerable<string>> EditParticipanteChurras(string authToken, int id_churras, int id_participante, string nome, string pago)
         {
-            Usuario usuario = new Usuario("","","",authToken);
-
+            Usuario usuario = new Usuario("", "", "", authToken);
             JsonResult j;
 
             var appSettings = ConfigurationManager.AppSettings;
@@ -252,12 +326,13 @@ namespace ChurraScheduler.Controllers
             try
             {
                 UsuarioDAO daouser = new UsuarioDAO(local);
-                if (daouser.FindAll_Custom("Select * from usuario where authtoken = \"" + usuario.AuthToken + "\" and login = \"" + usuario.Login + "\"").Count > 0)
+                if (daouser.FindAll_Custom("Select * from usuario where authtoken = \"" + usuario.AuthToken + "\"").Count > 0)
                 {
                     ChurrasParticipanteDAO dao = new ChurrasParticipanteDAO(local);
                     try
                     {
-                        dao.pagar(id_participante);
+                        ChurrasParticipante participante = new ChurrasParticipante(id_participante, id_churras, nome, Convert.ToBoolean(pago));
+                        dao.Update(participante);
 
                         j = new JsonResult(new object[] { true, dao.FindAll_Custom("Select * from churrasparticipante where id_churras = " + id_churras) });
 
@@ -276,6 +351,7 @@ namespace ChurraScheduler.Controllers
             }
             return j;
         }
+
 
     }
 }

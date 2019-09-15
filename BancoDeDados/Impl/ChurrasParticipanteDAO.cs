@@ -156,29 +156,23 @@ namespace BancoDeDados.Impl
 
         public override void Insert(ChurrasParticipante t)
         {
-            try
+            using (var cmd = sqliteConnection.CreateCommand())
             {
-                using (var cmd = sqliteConnection.CreateCommand())
-                {
-                    cmd.CommandText =
-                            "INSERT INTO ChurrasParticipante " +
-                            "(" +
-                                "id_churras, " +
-                                "nome_participante, " +
-                                "pago, " +
-                            ") " +
-                            "VALUES " +
-                            "(" +
-                                "\"" + t.Id_churras + "\", " +
-                                "\"" + t.Nome_participante + "\", " +
-                                "" + (t.Pago ? 1 : 0) + " " +
-                            ")";
-                    cmd.ExecuteNonQuery();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
+                cmd.CommandText =
+                        "INSERT INTO ChurrasParticipante " +
+                        "(" +
+                            "id_churras, " +
+                            "nome_participante, " +
+                            "pago " +
+                        ") " +
+                        "VALUES " +
+                        "(" +
+                            "'" + t.Id_churras + "', " +
+                            "'" + t.Nome_participante + "', " +
+                            "" + (t.Pago ? 1 : 0) + " " +
+                        ")";
+                Console.Write(cmd.CommandText);
+                cmd.ExecuteNonQuery();
             }
         }
 
